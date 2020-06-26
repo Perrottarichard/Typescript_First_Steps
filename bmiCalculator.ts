@@ -1,6 +1,22 @@
+interface Measurements {
+    height: number,
+    weight: number
+}
+const parseArgs = (args: Array<string>): Measurements => {
+    if (args.length < 4) throw new Error('not enough arguments');
+    if (args.length > 4) throw new Error('too many arguments')
 
-const calculateBmi = (h: number, w: number): string => {
-    const bmi = w / Math.pow(h / 100, 2)
+    if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+        return {
+            height: Number(args[2]),
+            weight: Number(args[3])
+        }
+    } else {
+        throw new Error('Provided values are not numbers')
+    }
+}
+const calculateBmi = (height: number, weight: number): string => {
+    const bmi = weight / Math.pow(height / 100, 2)
     if (bmi >= 40) {
         return "Obese Class 3 (Very severely obese)"
     } else if (bmi >= 35) {
@@ -19,4 +35,11 @@ const calculateBmi = (h: number, w: number): string => {
         return "Very severely underweight"
     }
 }
-console.log(calculateBmi(180, 74))
+try {
+    const { height, weight } = parseArgs(process.argv)
+    console.log(process.argv)
+    console.log(calculateBmi(height, weight))
+} catch (error) {
+    console.log(process.argv)
+    console.log('Error message: ', error.message)
+}
